@@ -137,7 +137,7 @@ def accidentsDateSeverity(analyzer, date):
             elif int(accidentlist["elements"][i]["Severity"]) == 4:
                 sev4 += 1
         return sev1, sev2, sev3, sev4
-    else:
+    elif accidentdate['key'] is None:
         return 0, 0, 0, 0
 
 
