@@ -127,6 +127,7 @@ def newStateEntry(state, accident):
     return stateentry
 
 
+
 # ==============================
 # Funciones de consulta
 # ==============================
