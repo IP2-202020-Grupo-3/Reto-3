@@ -39,14 +39,6 @@ es decir contiene los modelos con los datos en memoria
 # -----------------------------------------------------
 
 def newAnalyzer():
-    """ Inicializa el analizador
-
-    Crea una lista vacia para guardar todos los crimenes
-    Se crean indices (Maps) por los siguientes criterios:
-    -Fechas
-
-    Retorna el analizador inicializado.
-    """
     analyzer = {'accidents': None,
                 'dateIndex': None
                 }
@@ -65,14 +57,6 @@ def addAccident(analyzer, accident):
     return analyzer
 
 def updateDateIndex(map, accident):
-    """
-    Se toma la fecha del crimen y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de crimenes
-    y se actualiza el indice de tipos de crimenes.
-
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de crimenes
-    """
     occurreddate = accident['End_Time']
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     entry = om.get(map, accidentdate.date())
@@ -85,12 +69,6 @@ def updateDateIndex(map, accident):
     return map
 
 def addDateIndex(datentry, accident):
-    """
-    Actualiza un indice de tipo de crimenes.  Este indice tiene una lista
-    de crimenes y una tabla de hash cuya llave es el tipo de crimen y
-    el valor es una lista con los crimenes de dicho tipo en la fecha que
-    se está consultando (dada por el nodo del arbol)
-    """
     lst = datentry['lstaccidents']
     lt.addLast(lst, accident)
     stateIndex = datentry['stateIndex']
@@ -105,10 +83,6 @@ def addDateIndex(datentry, accident):
     return datentry
 
 def newDataEntry(accident):
-    """
-    Crea una entrada en el indice por fechas, es decir en el arbol
-    binario.
-    """
     entry = {'stateIndex': None, 'lstaccidents': None}
     entry['stateIndex'] = m.newMap(numelements=100,
                                      maptype='PROBING',
@@ -117,10 +91,6 @@ def newDataEntry(accident):
     return entry
 
 def newStateEntry(state, accident):
-    """
-    Crea una entrada en el indice por tipo de crimen, es decir en
-    la tabla de hash, que se encuentra en cada nodo del arbol.
-    """
     stateentry = {'state': None, 'lstaccidents': None}
     stateentry['state'] = state
     stateentry['lstaccidents'] = lt.newList('SINGLELINKED', compareStates)
