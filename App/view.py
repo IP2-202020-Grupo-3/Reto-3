@@ -52,7 +52,7 @@ def printMenu():
     print("1- Inicializar Analizador")
     print("2- Cargar información de accidentes")
     print("3- Mostrar la cantidad de accidentes por severidad en una fecha dada")
-    print("4- Requerimento 2")
+    print("4- ")
     print("0- Salir")
     print("*******************************************")
 
@@ -87,9 +87,8 @@ while True:
         print("Severidad 3 : {0}".format(sev3))
         print("Severidad 4 : {0}".format(sev4))
 
-
     elif int(inputs[0]) == 4:
-        print("\nRequerimiento No 1 del reto 3: ")
+        print("\n: ")
 
     else:
         sys.exit(0)
