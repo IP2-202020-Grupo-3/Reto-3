@@ -61,35 +61,24 @@ def loadData(analyzer, accidentsfile):
 # ___________________________________________________
 
 def accidentsSize(analyzer):
-    """
-    Numero de crimenes leidos
-    """
     return model.accidentsSize(analyzer)
 
 
 def indexHeight(analyzer):
-    """
-    Altura del indice (arbol)
-    """
     return model.indexHeight(analyzer)
 
 
 def indexSize(analyzer):
-    """
-    Numero de nodos en el arbol
-    """
     return model.indexSize(analyzer)
 
 
 def minKey(analyzer):
-    """
-    La menor llave del arbol
-    """
     return model.minKey(analyzer)
 
 
 def maxKey(analyzer):
-    """
-    La mayor llave del arbol
-    """
     return model.maxKey(analyzer)
+
+def accidentsDateSeverity(analyzer, date):
+    fecha = datetime.datetime.strptime(date, '%Y-%m-%d')
+    return model.accidentsDateSeverity(analyzer, fecha.date())

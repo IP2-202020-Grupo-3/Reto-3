@@ -38,10 +38,10 @@ operación seleccionada.
 # ___________________________________________________
 
 
-crimefile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
 
 # ___________________________________________________
-#  Menu principal
+#  Menú principal
 # ___________________________________________________
 
 
@@ -51,14 +51,14 @@ def printMenu():
     print("Bienvenido")
     print("1- Inicializar Analizador")
     print("2- Cargar información de accidentes")
-    print("3- Requerimento 1")
+    print("3- Mostrar la cantidad de accidentes por severidad en una fecha dada")
     print("4- Requerimento 2")
     print("0- Salir")
     print("*******************************************")
 
 
 """
-Menu principal
+Menú principal
 """
 while True:
     printMenu()
@@ -70,7 +70,7 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("\nCargando información de accidentes ....")
-        controller.loadData(cont, crimefile)
+        controller.loadData(cont, accidentsfile)
         print('Accidentes cargados: ' + str(controller.accidentsSize(cont)))
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
@@ -78,7 +78,14 @@ while True:
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
 
     elif int(inputs[0]) == 3:
-        print("\nBuscando accidentes en un rango de fechas: ")
+        fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
+        print("\nBuscando accidentes en una fecha por severidad")
+        sev1, sev2, sev3, sev4 = controller.accidentsDateSeverity(cont, fecha)
+        print("Se encontró la siguiente cantidad de accidentes ocurridos el {0}:".format(fecha))
+        print("Severidad 1 : {0}".format(sev1))
+        print("Severidad 2 : {0}".format(sev2))
+        print("Severidad 3 : {0}".format(sev3))
+        print("Severidad 4 : {0}".format(sev4))
 
 
     elif int(inputs[0]) == 4:

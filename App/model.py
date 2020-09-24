@@ -57,7 +57,7 @@ def addAccident(analyzer, accident):
     return analyzer
 
 def updateDateIndex(map, accident):
-    occurreddate = accident['End_Time']
+    occurreddate = accident['Start_Time']
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     entry = om.get(map, accidentdate.date())
     if entry is None:
@@ -83,20 +83,18 @@ def addDateIndex(datentry, accident):
     return datentry
 
 def newDataEntry(accident):
-    entry = {'stateIndex': None, 'lstaccidents': None}
+    entry = {'stateIndex': None,'lstaccidents': None}
     entry['stateIndex'] = m.newMap(numelements=100,
                                      maptype='PROBING',
                                      comparefunction=compareStates)
-    entry['lstaccidents'] = lt.newList('SINGLE_LINKED', compareDates)
+    entry['lstaccidents'] = lt.newList('ARRAY_LIST', compareDates)
     return entry
 
 def newStateEntry(state, accident):
     stateentry = {'state': None, 'lstaccidents': None}
     stateentry['state'] = state
-    stateentry['lstaccidents'] = lt.newList('SINGLELINKED', compareStates)
+    stateentry['lstaccidents'] = lt.newList('ARRRAY_LIST', compareStates)
     return stateentry
-
-
 
 # ==============================
 # Funciones de consulta
@@ -121,6 +119,29 @@ def minKey(analyzer):
 def maxKey(analyzer):
     return om.maxKey(analyzer['dateIndex'])
 
+def accidentsDateSeverity(analyzer, date):
+    sev1 = 0
+    sev2 = 0
+    sev3 = 0
+    sev4 = 0
+    accidentdate = om.get(analyzer['dateIndex'], date)
+    if accidentdate['key'] is not None:
+        accidentlist = me.getValue(accidentdate)['lstaccidents']
+        for i in range(0, lt.size(accidentlist)):
+            if int(accidentlist["elements"][i]["Severity"]) == 1:
+                sev1 += 1
+            elif int(accidentlist["elements"][i]["Severity"]) == 2:
+                sev2 += 1
+            elif int(accidentlist["elements"][i]["Severity"]) == 3:
+                sev3 += 1
+            elif int(accidentlist["elements"][i]["Severity"]) == 4:
+                sev4 += 1
+        return sev1, sev2, sev3, sev4
+    else:
+        return 0, 0, 0, 0
+
+
+    
 
 # ==============================
 # Funciones de Comparacion
