@@ -38,7 +38,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = "\Data\us_accidents_small.csv"
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\US_Accidents_Dec19.csv"
 
 # ___________________________________________________
 #  Menú principal

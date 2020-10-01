@@ -44,12 +44,12 @@ def newAnalyzer():
                 }
 
     analyzer['accidents'] = lt.newList('ARRAY_LIST', compareIds)
-    analyzer['dateIndex'] = om.newMap(omaptype='BST',
+    analyzer['dateIndex'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
     return analyzer
 
 
-# Funciones para agregar informacion al catalogo
+# Funciones para agregar información al catalogo
 
 def addAccident(analyzer, accident):
     lt.addLast(analyzer['accidents'], accident)
