@@ -92,6 +92,12 @@ while True:
         print("\nBuscando accidentes antes de: {0}".format(fecha))
         cantidad, fechaMax = controller.accidentsBeforeDate(cont, fecha)
         print("Antes del {0} ocurrieron {1} accidentes. \nLa fecha con más accidentes es: {2}".format(fecha, cantidad, fechaMax))
+    elif int(inputs[0]) == 5:
+        fechaIni = input("Entre la fecha inicial a buscar (Formato: YYYY-MM-DD): ")
+        fechaFin = input("Entre la fecha inicial a buscar (Formato: YYYY-MM-DD): ")
+        print("\nBuscando accidentes entre {0} y {1}: ".format(fechaIni, fechaFin))
+        cantidad, fechaMax = controller.accidentsRangeDate(cont, fechaIni, fechaFin)
+        print("Antes del {0} ocurrieron {1} accidentes. \nLa fecha con más accidentes es: {2}".format(fecha, cantidad, fechaMax))
 
     else:
         sys.exit(0)

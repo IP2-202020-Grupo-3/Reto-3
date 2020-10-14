@@ -86,3 +86,8 @@ def accidentsDateSeverity(analyzer, date):
 def accidentsBeforeDate(analyzer, date):
     fecha = datetime.datetime.strptime(date, '%Y-%m-%d')
     return model.accidentsBeforeDate(analyzer, fecha.date())
+
+def accidentsRangeDate(analyzer, dateStart, dateEnd):
+    fechaIni = datetime.datetime.strptime(dateStart, '%Y-%m-%d')
+    fechaEnd = datetime.datetime.strptime(dateEnd, '%Y-%m-%d')
+    return model.accidentsRangeDate(analyzer, fechaIni.date(), fechaEnd.date())

@@ -164,6 +164,18 @@ def accidentsBeforeDate(analyzer, date):
         fecha = fechaMax[0:10]
 
         return totalaccidents, fecha
+    else:
+        return 0, 0
+
+def accidentsRangeDate(analyzer, dateStart, dateEnd):
+        valor = om.values(analyzer["dateIndex"], dateStart, dateEnd)
+        lstiterator = it.newIterator(valor)
+        totalaccidents = 0
+        while (it.hasNext(lstiterator)):
+            lstdate = it.next(lstiterator)
+            totalaccidents += lt.size(lstdate['lstaccidents'])
+
+        return totalaccidents
 
 
     
