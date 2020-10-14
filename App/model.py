@@ -24,7 +24,7 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
-from DISClib.DataStructures import rbt
+from App import controller
 from DISClib.DataStructures import listiterator as it
 import datetime
 assert config
@@ -169,13 +169,25 @@ def accidentsBeforeDate(analyzer, date):
 
 def accidentsRangeDate(analyzer, dateStart, dateEnd):
         valor = om.values(analyzer["dateIndex"], dateStart, dateEnd)
+        severidades = {"Severidad 1":0, "Severidad 2":0, "Severidad 3":0, "Severidad 4": 0}
         lstiterator = it.newIterator(valor)
         totalaccidents = 0
         while (it.hasNext(lstiterator)):
             lstdate = it.next(lstiterator)
             totalaccidents += lt.size(lstdate['lstaccidents'])
-
-        return totalaccidents
+            fecha = lstdate['lstaccidents']["elements"][0]["Start_Time"]
+            sev1dia, sev2dia, sev3dia, sev4dia, = controller.accidentsDateSeverity(analyzer, fecha[0:10])
+            severidades["Severidad 1"] += sev1dia
+            severidades["Severidad 2"] += sev2dia
+            severidades["Severidad 3"] += sev3dia
+            severidades["Severidad 4"] += sev4dia
+        print(severidades)
+        llaves = list(severidades.keys())
+        valores = list(severidades.values())
+        mayor = max(valores)
+        sevMax = llaves[valores.index(mayor)]
+            
+        return totalaccidents, sevMax
 
 def getAccidentsByRangeState(analyzer, initialDate, endDate):
         valor = om.values(analyzer["dateIndex"], initialDate, endDate)
