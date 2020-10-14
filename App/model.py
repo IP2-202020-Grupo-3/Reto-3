@@ -37,7 +37,7 @@ es decir contiene los modelos con los datos en memoria
 """
 
 # -----------------------------------------------------
-# API del TAD Catalogo de accidentes
+# API del TAD Catálogo de accidentes
 # -----------------------------------------------------
 
 def newAnalyzer():
@@ -51,7 +51,7 @@ def newAnalyzer():
     return analyzer
 
 
-# Funciones para agregar información al catalogo
+# Funciones para agregar información al catálogo
 
 def addAccident(analyzer, accident):
     lt.addLast(analyzer['accidents'], accident)
@@ -181,7 +181,6 @@ def accidentsRangeDate(analyzer, dateStart, dateEnd):
             severidades["Severidad 2"] += sev2dia
             severidades["Severidad 3"] += sev3dia
             severidades["Severidad 4"] += sev4dia
-        print(severidades)
         llaves = list(severidades.keys())
         valores = list(severidades.values())
         mayor = max(valores)
@@ -211,7 +210,7 @@ def getAccidentsByRangeState(analyzer, initialDate, endDate):
     
 
 # ==============================
-# Funciones de Comparacion
+# Funciones de Comparación
 # ==============================
 
 def compareIds(id1, id2):

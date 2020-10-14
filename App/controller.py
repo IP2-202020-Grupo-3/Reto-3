@@ -34,7 +34,7 @@ recae sobre el controlador.
 """
 
 # ___________________________________________________
-#  Inicializacion del catalogo
+#  Inicialización del catálogo
 # ___________________________________________________
 
 
@@ -91,7 +91,7 @@ def accidentsRangeDate(analyzer, dateStart, dateEnd):
     fechaIni = datetime.datetime.strptime(dateStart, '%Y-%m-%d')
     fechaEnd = datetime.datetime.strptime(dateEnd, '%Y-%m-%d')
     return model.accidentsRangeDate(analyzer, fechaIni.date(), fechaEnd.date())
-    
+
 def getAccidentsByRangeState(analyzer, dateStart, dateEnd):
     fechaIni = datetime.datetime.strptime(dateStart, '%Y-%m-%d')
     fechaEnd = datetime.datetime.strptime(dateEnd, '%Y-%m-%d')
