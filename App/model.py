@@ -177,6 +177,24 @@ def accidentsRangeDate(analyzer, dateStart, dateEnd):
 
         return totalaccidents
 
+def getAccidentsByRangeState(analyzer, initialDate, endDate):
+        valor = om.values(analyzer["dateIndex"], initialDate, endDate)
+        estados = {}
+        lstiterator = it.newIterator(valor)
+        totalaccidents = 0
+        while (it.hasNext(lstiterator)):
+            lstdate = it.next(lstiterator)
+            totalaccidents += lt.size(lstdate['lstaccidents'])
+            if lstdate['lstaccidents']["elements"][0]["State"] not in list(estados.keys()):
+                estados[lstdate['lstaccidents']["elements"][0]["State"]] = lt.size(lstdate['lstaccidents'])
+            else:
+                estados[lstdate['lstaccidents']["elements"][0]["State"]] += lt.size(lstdate['lstaccidents'])
+        llaves = list(estados.keys())
+        valores = list(estados.values())
+        mayor = max(valores)
+        estadoMax = str(llaves[valores.index(mayor)])
+        return estadoMax
+
 
     
 

@@ -91,3 +91,7 @@ def accidentsRangeDate(analyzer, dateStart, dateEnd):
     fechaIni = datetime.datetime.strptime(dateStart, '%Y-%m-%d')
     fechaEnd = datetime.datetime.strptime(dateEnd, '%Y-%m-%d')
     return model.accidentsRangeDate(analyzer, fechaIni.date(), fechaEnd.date())
+def getAccidentsByRangeState(analyzer, dateStart, dateEnd):
+    fechaIni = datetime.datetime.strptime(dateStart, '%Y-%m-%d')
+    fechaEnd = datetime.datetime.strptime(dateEnd, '%Y-%m-%d')
+    return model.getAccidentsByRangeState(analyzer, fechaIni.date(), fechaEnd.date())

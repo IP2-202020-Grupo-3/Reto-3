@@ -38,7 +38,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_dis_2016.csv"
 
 # ___________________________________________________
 #  Menú principal
@@ -52,7 +52,9 @@ def printMenu():
     print("1- Inicializar Analizador")
     print("2- Cargar información de accidentes")
     print("3- Mostrar la cantidad de accidentes por severidad en una fecha dada")
-    print("4- ")
+    print("4- Consultar cantidad de accidentes antes de una fecha")
+    print("5- Consultar cantidad de accidentes entre fechas")
+    print("6- Consultar el estado con más accidentes entre ciertas fechas")
     print("0- Salir")
     print("*******************************************")
 
@@ -94,11 +96,16 @@ while True:
         print("Antes del {0} ocurrieron {1} accidentes. \nLa fecha con más accidentes es: {2}".format(fecha, cantidad, fechaMax))
     elif int(inputs[0]) == 5:
         fechaIni = input("Entre la fecha inicial a buscar (Formato: YYYY-MM-DD): ")
-        fechaFin = input("Entre la fecha inicial a buscar (Formato: YYYY-MM-DD): ")
+        fechaFin = input("Entre la fecha final a buscar (Formato: YYYY-MM-DD): ")
         print("\nBuscando accidentes entre {0} y {1}: ".format(fechaIni, fechaFin))
         cantidad, fechaMax = controller.accidentsRangeDate(cont, fechaIni, fechaFin)
         print("Antes del {0} ocurrieron {1} accidentes. \nLa fecha con más accidentes es: {2}".format(fecha, cantidad, fechaMax))
-
+    elif int(inputs[0]) == 6:
+        fechaIni = input("Entre la fecha inicial a buscar (Formato: YYYY-MM-DD): ")
+        fechaFin = input("Entre la fecha final a buscar (Formato: YYYY-MM-DD): ")
+        print("\nBuscando estado con más accidentes entre {0} y {1}: ".format(fechaIni, fechaFin))
+        estado = controller.getAccidentsByRangeState(cont, fechaIni, fechaFin)
+        print("El estado que más accidentes tiene entre el {0} y {1} es: {2}. ".format(fechaIni, fechaFin, estado))
     else:
         sys.exit(0)
 sys.exit(0)
