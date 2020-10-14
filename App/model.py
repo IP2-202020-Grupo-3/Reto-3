@@ -24,6 +24,8 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
+from DISClib.DataStructures import rbt
+from DISClib.DataStructures import listiterator as it
 import datetime
 assert config
 
@@ -139,6 +141,29 @@ def accidentsDateSeverity(analyzer, date):
         return sev1, sev2, sev3, sev4
     elif accidentdate['key'] is None:
         return 0, 0, 0, 0
+
+def accidentsBeforeDate(analyzer, date):
+    accidentdate = om.get(analyzer['dateIndex'], date)
+    if accidentdate['key'] is not None:
+        minima = minKey(analyzer)
+        valor = om.values(analyzer["dateIndex"], minima, date)
+        fechas = {}
+        lstiterator = it.newIterator(valor)
+        totalaccidents = 0
+        while (it.hasNext(lstiterator)):
+            lstdate = it.next(lstiterator)
+            totalaccidents += lt.size(lstdate['lstaccidents'])
+            if lstdate['lstaccidents']["elements"][0]["Start_Time"] not in list(fechas.keys()):
+                fechas[lstdate['lstaccidents']["elements"][0]["Start_Time"]] = lt.size(lstdate['lstaccidents'])
+            else:
+                fechas[lstdate['lstaccidents']["elements"][0]["Start_Time"]] += lt.size(lstdate['lstaccidents'])
+        llaves = list(fechas.keys())
+        valores = list(fechas.values())
+        mayor = max(valores)
+        fechaMax = str(llaves[valores.index(mayor)])
+        fecha = fechaMax[0:10]
+
+        return totalaccidents, fecha
 
 
     

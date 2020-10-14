@@ -38,7 +38,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\US_Accidents_Dec19.csv"
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
 
 # ___________________________________________________
 #  Menú principal
@@ -81,14 +81,17 @@ while True:
         fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
         print("\nBuscando accidentes en una fecha por severidad")
         sev1, sev2, sev3, sev4 = controller.accidentsDateSeverity(cont, fecha)
-        print("Se encontró la siguiente cantidad de accidentes ocurridos el {0}:".format(fecha))
+        print("Se encontró la siguiente1cantidad de accidentes ocurridos el {0}:".format(fecha))
         print("Severidad 1 : {0}".format(sev1))
         print("Severidad 2 : {0}".format(sev2))
         print("Severidad 3 : {0}".format(sev3))
         print("Severidad 4 : {0}".format(sev4))
 
     elif int(inputs[0]) == 4:
-        print("\n: ")
+        fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
+        print("\nBuscando accidentes antes de: {0}".format(fecha))
+        cantidad, fechaMax = controller.accidentsBeforeDate(cont, fecha)
+        print("Antes del {0} ocurrieron {1} accidentes. \nLa fecha con más accidentes es: {2}".format(fecha, cantidad, fechaMax))
 
     else:
         sys.exit(0)

@@ -82,3 +82,7 @@ def maxKey(analyzer):
 def accidentsDateSeverity(analyzer, date):
     fecha = datetime.datetime.strptime(date, '%Y-%m-%d')
     return model.accidentsDateSeverity(analyzer, fecha.date())
+    
+def accidentsBeforeDate(analyzer, date):
+    fecha = datetime.datetime.strptime(date, '%Y-%m-%d')
+    return model.accidentsBeforeDate(analyzer, fecha.date())
