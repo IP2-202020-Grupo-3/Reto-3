@@ -97,8 +97,7 @@ def getAccidentsByRangeState(analyzer, dateStart, dateEnd):
     fechaEnd = datetime.datetime.strptime(dateEnd, '%Y-%m-%d')
     return model.getAccidentsByRangeState(analyzer, fechaIni.date(), fechaEnd.date())
 
-def accidentsPerHour(analyzer, date, hourStart, hourEnd):
-    fecha = datetime.datetime.strptime(date, '%Y-%m-%d')
+def accidentsPerHour(analyzer, hourStart, hourEnd):
     horaIni = datetime.datetime.strptime(hourStart, "%H:%M")
     horaFin = datetime.datetime.strptime(hourEnd, "%H:%M")
-    return model.accidentsPerHour(analyzer, fecha.date(), horaIni.time(), horaFin.time())
+    return model.accidentsPerHour(analyzer, horaIni.time(), horaFin.time())

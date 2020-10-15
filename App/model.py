@@ -229,7 +229,7 @@ def getAccidentsByRangeState(analyzer, initialDate, endDate):
 
         return estadoMax, fecha
 
-def accidentsPerHour(analyzer, date, hourStart, hourEnd):
+def accidentsPerHour(analyzer, hourStart, hourEnd):
     if hourStart.minute >= 0 and hourStart.minute < 30:
         fechaIni = hourStart.replace(minute=0, second=0, microsecond=0)
     elif hourStart.minute >= 30 and hourStart.minute < 59:
@@ -245,6 +245,8 @@ def accidentsPerHour(analyzer, date, hourStart, hourEnd):
     while (it.hasNext(lstiterator)):
         lstdate = it.next(lstiterator)
         totalaccidents += lt.size(lstdate['lstaccidents'])
+
+    return totalaccidents
 
     
 

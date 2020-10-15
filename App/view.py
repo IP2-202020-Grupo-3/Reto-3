@@ -108,11 +108,11 @@ while True:
         estado, fechaMax = controller.getAccidentsByRangeState(cont, fechaIni, fechaFin)
         print("El estado que más accidentes tiene entre el {0} y {1} es: {2}. \nLa fecha con más accidentes es: {3}".format(fechaIni, fechaFin, estado, fechaMax))
     elif int(inputs[0]) == 7:
-        fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
         horaIni = input("Entre la hora inicial a buscar (Formato: HH:MM): ")
         horaFin = input("Entre la hora final a buscar (Formato: HH:MM): ")
-        print("\nBuscando accidentes del {0} entre {1} y {2}: ".format(fecha, horaIni, horaFin))
-        controller.accidentsPerHour(cont, fecha, horaIni, horaFin)
+        print("\nBuscando accidentes entre {0} y {1}: ".format(horaIni, horaFin))
+        totalaccidents = controller.accidentsPerHour(cont, horaIni, horaFin)
+        print(totalaccidents)
     else:
         sys.exit(0)
 sys.exit(0)
