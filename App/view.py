@@ -79,7 +79,6 @@ while True:
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
         print('Menor Llave: ' + str(controller.minKey(cont)))
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
-        print(cont["hourIndex"])
     elif int(inputs[0]) == 3:
         fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
         print("\nBuscando accidentes en una fecha por severidad")

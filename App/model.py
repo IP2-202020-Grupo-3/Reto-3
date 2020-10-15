@@ -82,10 +82,16 @@ def updateHourIndex(map, accident):
         datentry = newDataEntry(accident)
         if accidentdate.minute >= 0 and accidentdate.minute < 15:
             om.put(map, accidentdate.time().replace(minute=0, second=0, microsecond=0), datentry)
-        if accidentdate.minute >= 15 and accidentdate.minute < 30:
+        elif accidentdate.minute >= 15 and accidentdate.minute < 30:
             om.put(map, accidentdate.time().replace(minute=30, second=0, microsecond=0), datentry)
-        elif accidentdate.minute >= 30 and accidentdate.minute < 59:
+        elif accidentdate.minute >= 30 and accidentdate.minute < 45:
             om.put(map, accidentdate.time().replace(minute=30, second=0, microsecond=0), datentry)
+        elif accidentdate.minute >= 45 and accidentdate.minute < 59:
+            if accidentdate.hour == 23:
+                hora = 0
+            else:
+                hora = accidentdate.hour + 1
+            om.put(map, accidentdate.time().replace(hour=hora, minute=0, second=0, microsecond=0), datentry)
     else:
         datentry = me.getValue(entry)
     addHourIndex(datentry, accident)
@@ -237,14 +243,27 @@ def accidentsPerHour(analyzer, hourStart, hourEnd):
         fechaIni = hourStart.replace(minute=0, second=0, microsecond=0)
     elif hourStart.minute >= 15 and hourStart.minute < 30:
         fechaIni = hourStart.replace(minute=30, second=0, microsecond=0)
-    elif hourStart.minute >= 30 and hourStart.minute < 59:
+    elif hourStart.minute >= 30 and hourStart.minute < 45:
         fechaIni = hourStart.replace(minute=30, second=0, microsecond=0)
+    elif hourStart.minute >= 45 and hourStart.minute < 59:
+        if hourStart.hour == 23:
+            hora = 0
+        else:
+            hora = hourStart.hour + 1
+        fechaIni = hourStart.replace(hour=hora, minute=0, second=0, microsecond=0)
+
     if hourEnd.minute >= 0 and hourEnd.minute < 30:
         fechaFin = hourEnd.replace(minute=0, second=0, microsecond=0)
     elif hourEnd.minute >= 15 and hourEnd.minute < 30:
         fechaFin = hourEnd.replace(minute=30, second=0, microsecond=0)
-    elif hourEnd.minute >= 30 and hourEnd.minute < 59:
+    elif hourEnd.minute >= 30 and hourEnd.minute < 45:
         fechaFin = hourEnd.replace(minute=30, second=0, microsecond=0)
+    elif hourEnd.minute >= 45 and hourEnd.minute < 59:
+        if hourEnd.hour == 23:
+            horafin = 0
+        else:
+            horafin = hourEnd.hour + 1
+        fechaFin = hourEnd.replace(hour=horafin, minute=0, second=0, microsecond=0)
 
     valor = om.values(analyzer["hourIndex"], fechaIni, fechaFin)
     lstiterator = it.newIterator(valor)
