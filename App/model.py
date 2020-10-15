@@ -273,14 +273,14 @@ def accidentsPerHour(analyzer, hourStart, hourEnd):
     while (it.hasNext(lstiterator)):
         lstdate = it.next(lstiterator)
         totalaccidents += lt.size(lstdate['lstaccidents'])
-        if int(accidentlist["elements"][num]["Severity"]) == 1:
+        if int(lstdate["elements"][num]["Severity"]) == 1:
                 severidades["Severidad 1"] += 1
-            elif int(accidentlist["elements"][num]["Severity"]) == 2:
-                severidades["Severidad 2"] += 1
-            elif int(accidentlist["elements"][num]["Severity"]) == 3:
-                severidades["Severidad 3"] += 1
-            elif int(accidentlist["elements"][num]["Severity"]) == 4:
-                severidades["Severidad 4"] += 1
+        elif int(lstdate["elements"][num]["Severity"]) == 2:
+            severidades["Severidad 2"] += 1
+        elif int(lstdate["elements"][num]["Severity"]) == 3:
+            severidades["Severidad 3"] += 1
+        elif int(lstdate["elements"][num]["Severity"]) == 4:
+            severidades["Severidad 4"] += 1
         num += 1
     print(lstdate)
     return totalaccidents
