@@ -42,7 +42,8 @@ es decir contiene los modelos con los datos en memoria
 
 def newAnalyzer():
     analyzer = {'accidents': None,
-                'dateIndex': None
+                'dateIndex': None,
+                "hourIndex": None
                 }
 
     analyzer['accidents'] = lt.newList('ARRAY_LIST', compareIds)
