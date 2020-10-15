@@ -268,11 +268,21 @@ def accidentsPerHour(analyzer, hourStart, hourEnd):
     valor = om.values(analyzer["hourIndex"], fechaIni, fechaFin)
     lstiterator = it.newIterator(valor)
     totalaccidents = 0
-    print(valor)
+    num = 0
+    severidades = {"Severidad 1":0, "Severidad 2":0, "Severidad 3":0, "Severidad 4": 0}
     while (it.hasNext(lstiterator)):
         lstdate = it.next(lstiterator)
         totalaccidents += lt.size(lstdate['lstaccidents'])
-
+        if int(accidentlist["elements"][num]["Severity"]) == 1:
+                severidades["Severidad 1"] += 1
+            elif int(accidentlist["elements"][num]["Severity"]) == 2:
+                severidades["Severidad 2"] += 1
+            elif int(accidentlist["elements"][num]["Severity"]) == 3:
+                severidades["Severidad 3"] += 1
+            elif int(accidentlist["elements"][num]["Severity"]) == 4:
+                severidades["Severidad 4"] += 1
+        num += 1
+    print(lstdate)
     return totalaccidents
 
     
