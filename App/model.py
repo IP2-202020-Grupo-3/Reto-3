@@ -282,8 +282,9 @@ def accidentsPerHour(analyzer, hourStart, hourEnd):
         elif int(lstdate["elements"][num]["Severity"]) == 4:
             severidades["Severidad 4"] += 1
         num += 1
-    print(lstdate)
-    return totalaccidents
+    numaccident = controller.accidentsSize(analyzer)
+    promedio = (totalaccidents/numaccidents)*100
+    return (totalaccidents, severidad, promedio)
 
     
 
