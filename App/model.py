@@ -48,6 +48,8 @@ def newAnalyzer():
     analyzer['accidents'] = lt.newList('ARRAY_LIST', compareIds)
     analyzer['dateIndex'] = om.newMap(omaptype='RBT',
                                       comparefunction=compareDates)
+    analyzer["hourIndex"] = om.newMap(omaptype='RBT',
+                                      comparefunction=compareDates)
     return analyzer
 
 
@@ -56,6 +58,7 @@ def newAnalyzer():
 def addAccident(analyzer, accident):
     lt.addLast(analyzer['accidents'], accident)
     updateDateIndex(analyzer['dateIndex'], accident)
+    updateHourIndex(analyzer['hourIndex'], accident)
     return analyzer
 
 def updateDateIndex(map, accident):
@@ -70,33 +73,38 @@ def updateDateIndex(map, accident):
     addDateIndex(datentry, accident)
     return map
 
+def updateHourIndex(map, accident):
+    occurredhour = accident['Start_Time']
+    accidentdate = datetime.datetime.strptime(occurredhour, '%Y-%m-%d %H:%M:%S')
+    entry = om.get(map, accidentdate.time().replace(second=0, microsecond=0))
+    if entry is None:
+        datentry = newDataEntry(accident)
+        if accidentdate.minute >= 0 and accidentdate.minute < 30:
+            om.put(map, accidentdate.time().replace(minute=0, second=0, microsecond=0), datentry)
+        elif accidentdate.minute >= 30 and accidentdate.minute < 59:
+            om.put(map, accidentdate.time().replace(minute=30, second=0, microsecond=0), datentry)
+    else:
+        datentry = me.getValue(entry)
+    addHourIndex(datentry, accident)
+    return map
+
+def addHourIndex(datentry, accident):
+    lst = datentry['lstaccidents']
+    lt.addLast(lst, accident)
+
+    return datentry
+
 def addDateIndex(datentry, accident):
     lst = datentry['lstaccidents']
     lt.addLast(lst, accident)
-    stateIndex = datentry['stateIndex']
-    stateentry = m.get(stateIndex, accident['State'])
-    if (stateentry is None):
-        entry = newStateEntry(accident['State'], accident)
-        lt.addLast(entry['lstaccidents'], accident)
-        m.put(stateIndex, accident['State'], entry)
-    else:
-        entry = me.getValue(stateentry)
-        lt.addLast(entry['lstaccidents'], accident)
+
     return datentry
 
 def newDataEntry(accident):
-    entry = {'stateIndex': None,'lstaccidents': None}
-    entry['stateIndex'] = m.newMap(numelements=100,
-                                     maptype='PROBING',
-                                     comparefunction=compareStates)
+    entry = {'lstaccidents': None}
     entry['lstaccidents'] = lt.newList('ARRAY_LIST', compareDates)
     return entry
 
-def newStateEntry(state, accident):
-    stateentry = {'state': None, 'lstaccidents': None}
-    stateentry['state'] = state
-    stateentry['lstaccidents'] = lt.newList('ARRRAY_LIST', compareStates)
-    return stateentry
 
 # ==============================
 # Funciones de consulta
@@ -191,6 +199,7 @@ def accidentsRangeDate(analyzer, dateStart, dateEnd):
 def getAccidentsByRangeState(analyzer, initialDate, endDate):
         valor = om.values(analyzer["dateIndex"], initialDate, endDate)
         estados = {}
+        fechas = {}
         lstiterator = it.newIterator(valor)
         totalaccidents = 0
         while (it.hasNext(lstiterator)):
@@ -200,12 +209,42 @@ def getAccidentsByRangeState(analyzer, initialDate, endDate):
                 estados[lstdate['lstaccidents']["elements"][0]["State"]] = lt.size(lstdate['lstaccidents'])
             else:
                 estados[lstdate['lstaccidents']["elements"][0]["State"]] += lt.size(lstdate['lstaccidents'])
-        llaves = list(estados.keys())
-        valores = list(estados.values())
-        mayor = max(valores)
-        estadoMax = str(llaves[valores.index(mayor)])
-        return estadoMax
 
+            if lstdate['lstaccidents']["elements"][0]["Start_Time"] not in list(fechas.keys()):
+                fechas[lstdate['lstaccidents']["elements"][0]["Start_Time"]] = lt.size(lstdate['lstaccidents'])
+            else:
+                fechas[lstdate['lstaccidents']["elements"][0]["Start_Time"]] += lt.size(lstdate['lstaccidents'])
+
+        llavesEstados = list(estados.keys())
+        valoresEstados = list(estados.values())
+        mayorEstados = max(valoresEstados)
+        estadoMax = str(llavesEstados[valoresEstados.index(mayorEstados)])
+
+        llavesFecha = list(fechas.keys())
+        valoresFecha = list(fechas.values())
+        mayorFecha = max(valoresFecha)
+        fechaMax = str(llavesFecha[valoresFecha.index(mayorFecha)])
+        fecha = fechaMax[0:10]
+
+
+        return estadoMax, fecha
+
+def accidentsPerHour(analyzer, date, hourStart, hourEnd):
+    if hourStart.minute >= 0 and hourStart.minute < 30:
+        fechaIni = hourStart.replace(minute=0, second=0, microsecond=0)
+    elif hourStart.minute >= 30 and hourStart.minute < 59:
+        fechaIni = hourStart.replace(minute=30, second=0, microsecond=0)
+    if hourEnd.minute >= 0 and hourEnd.minute < 30:
+        fechaFin = hourStart.replace(minute=0, second=0, microsecond=0)
+    elif hourEnd.minute >= 30 and hourEnd.minute < 59:
+        fechaFin = hourStart.replace(minute=30, second=0, microsecond=0)
+
+    valor = om.values(analyzer["hourIndex"], fechaIni, fechaFin)
+    lstiterator = it.newIterator(valor)
+    totalaccidents = 0
+    while (it.hasNext(lstiterator)):
+        lstdate = it.next(lstiterator)
+        totalaccidents += lt.size(lstdate['lstaccidents'])
 
     
 

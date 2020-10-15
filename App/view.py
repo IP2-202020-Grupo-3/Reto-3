@@ -25,6 +25,7 @@ import config
 from DISClib.ADT import list as lt
 from App import controller
 assert config
+from DISClib.ADT import orderedmap as om
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -38,7 +39,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_dis_2016.csv"
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
 
 # ___________________________________________________
 #  Menú principal
@@ -78,7 +79,7 @@ while True:
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
         print('Menor Llave: ' + str(controller.minKey(cont)))
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
-
+        print(cont["hourIndex"])
     elif int(inputs[0]) == 3:
         fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
         print("\nBuscando accidentes en una fecha por severidad")
@@ -104,8 +105,14 @@ while True:
         fechaIni = input("Entre la fecha inicial a buscar (Formato: YYYY-MM-DD): ")
         fechaFin = input("Entre la fecha final a buscar (Formato: YYYY-MM-DD): ")
         print("\nBuscando estado con más accidentes entre {0} y {1}: ".format(fechaIni, fechaFin))
-        estado = controller.getAccidentsByRangeState(cont, fechaIni, fechaFin)
-        print("El estado que más accidentes tiene entre el {0} y {1} es: {2}. ".format(fechaIni, fechaFin, estado))
+        estado, fechaMax = controller.getAccidentsByRangeState(cont, fechaIni, fechaFin)
+        print("El estado que más accidentes tiene entre el {0} y {1} es: {2}. \nLa fecha con más accidentes es: {3}".format(fechaIni, fechaFin, estado, fechaMax))
+    elif int(inputs[0]) == 7:
+        fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
+        horaIni = input("Entre la hora inicial a buscar (Formato: HH:MM): ")
+        horaFin = input("Entre la hora final a buscar (Formato: HH:MM): ")
+        print("\nBuscando accidentes del {0} entre {1} y {2}: ".format(fecha, horaIni, horaFin))
+        controller.accidentsPerHour(cont, fecha, horaIni, horaFin)
     else:
         sys.exit(0)
 sys.exit(0)
