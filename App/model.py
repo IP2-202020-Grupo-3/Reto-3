@@ -80,8 +80,10 @@ def updateHourIndex(map, accident):
     entry = om.get(map, accidentdate.time().replace(second=0, microsecond=0))
     if entry is None:
         datentry = newDataEntry(accident)
-        if accidentdate.minute >= 0 and accidentdate.minute < 30:
+        if accidentdate.minute >= 0 and accidentdate.minute < 15:
             om.put(map, accidentdate.time().replace(minute=0, second=0, microsecond=0), datentry)
+        if accidentdate.minute >= 15 and accidentdate.minute < 30:
+            om.put(map, accidentdate.time().replace(minute=30, second=0, microsecond=0), datentry)
         elif accidentdate.minute >= 30 and accidentdate.minute < 59:
             om.put(map, accidentdate.time().replace(minute=30, second=0, microsecond=0), datentry)
     else:
