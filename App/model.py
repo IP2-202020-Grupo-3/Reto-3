@@ -156,7 +156,7 @@ def accidentsDateSeverity(analyzer, date):
             elif int(accidentlist["elements"][i]["Severity"]) == 4:
                 sev4 += 1
         return sev1, sev2, sev3, sev4
-    elif accidentdate['key'] is None:
+    else:
         return 0, 0, 0, 0
 
 def accidentsBeforeDate(analyzer, date):
@@ -185,6 +185,8 @@ def accidentsBeforeDate(analyzer, date):
         return 0, 0
 
 def accidentsRangeDate(analyzer, dateStart, dateEnd):
+    accidentdate = om.get(analyzer['dateIndex'], dateStart)
+    if accidentdate['key'] is not None:
         valor = om.values(analyzer["dateIndex"], dateStart, dateEnd)
         severidades = {"Severidad 1":0, "Severidad 2":0, "Severidad 3":0, "Severidad 4": 0}
         lstiterator = it.newIterator(valor)
@@ -204,8 +206,12 @@ def accidentsRangeDate(analyzer, dateStart, dateEnd):
         sevMax = llaves[valores.index(mayor)]
             
         return totalaccidents, sevMax
+    else:
+        return 0, "Ninguna"
 
 def getAccidentsByRangeState(analyzer, initialDate, endDate):
+    accidentdate = om.get(analyzer['dateIndex'], initialDate)
+    if accidentdate['key'] is not None:
         valor = om.values(analyzer["dateIndex"], initialDate, endDate)
         estados = {}
         fechas = {}
@@ -235,8 +241,9 @@ def getAccidentsByRangeState(analyzer, initialDate, endDate):
         fechaMax = str(llavesFecha[valoresFecha.index(mayorFecha)])
         fecha = fechaMax[0:10]
 
-
         return estadoMax, fecha
+    else:
+        return "Ninguno", "SF"
 
 def accidentsPerHour(analyzer, hourStart, hourEnd):
     if hourStart.minute >= 0 and hourStart.minute < 15:
@@ -265,26 +272,34 @@ def accidentsPerHour(analyzer, hourStart, hourEnd):
             horafin = hourEnd.hour + 1
         fechaFin = hourEnd.replace(hour=horafin, minute=0, second=0, microsecond=0)
 
-    valor = om.values(analyzer["hourIndex"], fechaIni, fechaFin)
-    lstiterator = it.newIterator(valor)
-    totalaccidents = 0
-    num = 0
-    severidades = {"Severidad 1":0, "Severidad 2":0, "Severidad 3":0, "Severidad 4": 0}
-    while (it.hasNext(lstiterator)):
-        lstdate = it.next(lstiterator)
-        totalaccidents += lt.size(lstdate['lstaccidents'])
-        if int(lstdate["elements"][num]["Severity"]) == 1:
-                severidades["Severidad 1"] += 1
-        elif int(lstdate["elements"][num]["Severity"]) == 2:
-            severidades["Severidad 2"] += 1
-        elif int(lstdate["elements"][num]["Severity"]) == 3:
-            severidades["Severidad 3"] += 1
-        elif int(lstdate["elements"][num]["Severity"]) == 4:
-            severidades["Severidad 4"] += 1
-        num += 1
-    numaccident = controller.accidentsSize(analyzer)
-    promedio = (totalaccidents/numaccidents)*100
-    return (totalaccidents, severidad, promedio)
+    accidenthour = om.get(analyzer['hourIndex'], fechaIni)
+    if accidenthour['key'] is not None:
+        valor = om.values(analyzer["hourIndex"], fechaIni, fechaFin)
+        lstiterator = it.newIterator(valor)
+        totalaccidents = 0
+        num = 0
+        Sev1 = 0
+        Sev2 = 0
+        Sev3 = 0
+        Sev4 = 0
+        while (it.hasNext(lstiterator)):
+            lstdate = it.next(lstiterator)
+            totalaccidents += lt.size(lstdate['lstaccidents'])
+            if int(lstdate["elements"][num]["Severity"]) == 1:
+                Sev1 += 1
+            elif int(lstdate["elements"][num]["Severity"]) == 2:
+                Sev2 += 1
+            elif int(lstdate["elements"][num]["Severity"]) == 3:
+                Sev3 += 1
+            elif int(lstdate["elements"][num]["Severity"]) == 4:
+                Sev4 += 1
+            num += 1
+        numaccident = controller.accidentsSize(analyzer)
+        promedio = (totalaccidents/numaccident)*100
+
+        return totalaccidents, Sev1, Sev2, Sev3, Sev4, promedio
+    else:
+        return 0, 0, 0, 0, 0, 0
 
     
 
