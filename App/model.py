@@ -230,18 +230,23 @@ def getAccidentsByRangeState(analyzer, initialDate, endDate):
         return estadoMax, fecha
 
 def accidentsPerHour(analyzer, hourStart, hourEnd):
-    if hourStart.minute >= 0 and hourStart.minute < 30:
+    if hourStart.minute >= 0 and hourStart.minute < 15:
         fechaIni = hourStart.replace(minute=0, second=0, microsecond=0)
+    elif hourStart.minute >= 15 and hourStart.minute < 30:
+        fechaIni = hourStart.replace(minute=30, second=0, microsecond=0)
     elif hourStart.minute >= 30 and hourStart.minute < 59:
         fechaIni = hourStart.replace(minute=30, second=0, microsecond=0)
     if hourEnd.minute >= 0 and hourEnd.minute < 30:
-        fechaFin = hourStart.replace(minute=0, second=0, microsecond=0)
+        fechaFin = hourEnd.replace(minute=0, second=0, microsecond=0)
+    elif hourEnd.minute >= 15 and hourEnd.minute < 30:
+        fechaFin = hourEnd.replace(minute=30, second=0, microsecond=0)
     elif hourEnd.minute >= 30 and hourEnd.minute < 59:
-        fechaFin = hourStart.replace(minute=30, second=0, microsecond=0)
+        fechaFin = hourEnd.replace(minute=30, second=0, microsecond=0)
 
     valor = om.values(analyzer["hourIndex"], fechaIni, fechaFin)
     lstiterator = it.newIterator(valor)
     totalaccidents = 0
+    print(valor)
     while (it.hasNext(lstiterator)):
         lstdate = it.next(lstiterator)
         totalaccidents += lt.size(lstdate['lstaccidents'])
