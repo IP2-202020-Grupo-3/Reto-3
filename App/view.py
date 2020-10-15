@@ -39,7 +39,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_dis_2016.csv"
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
 
 # ___________________________________________________
 #  Menú principal
@@ -56,6 +56,7 @@ def printMenu():
     print("4- Consultar cantidad de accidentes antes de una fecha")
     print("5- Consultar cantidad de accidentes entre fechas")
     print("6- Consultar el estado con más accidentes entre ciertas fechas")
+    print("7- Consultar la cantidad de accidentes en un rango de horas. (Consulta todas las fechas)")
     print("0- Salir")
     print("*******************************************")
 

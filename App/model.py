@@ -43,7 +43,7 @@ es decir contiene los modelos con los datos en memoria
 def newAnalyzer():
     analyzer = {'accidents': None,
                 'dateIndex': None,
-                "hourIndex": None
+                "hourIndex": None,
                 }
 
     analyzer['accidents'] = lt.newList('ARRAY_LIST', compareIds)
@@ -79,39 +79,39 @@ def updateHourIndex(map, accident):
     accidentdate = datetime.datetime.strptime(occurredhour, '%Y-%m-%d %H:%M:%S')
     entry = om.get(map, accidentdate.time().replace(second=0, microsecond=0))
     if entry is None:
-        datentry = newDataEntry(accident)
-        if accidentdate.minute >= 0 and accidentdate.minute < 15:
+        datentry = newHourEntry(accident)
+        if accidentdate.minute >= 0 and accidentdate.minute <= 30:
             om.put(map, accidentdate.time().replace(minute=0, second=0, microsecond=0), datentry)
-        elif accidentdate.minute >= 15 and accidentdate.minute < 30:
-            om.put(map, accidentdate.time().replace(minute=30, second=0, microsecond=0), datentry)
-        elif accidentdate.minute >= 30 and accidentdate.minute < 45:
-            om.put(map, accidentdate.time().replace(minute=30, second=0, microsecond=0), datentry)
-        elif accidentdate.minute >= 45 and accidentdate.minute < 59:
+        elif accidentdate.minute > 30 and accidentdate.minute <= 59:
             if accidentdate.hour == 23:
                 hora = 0
             else:
                 hora = accidentdate.hour + 1
             om.put(map, accidentdate.time().replace(hour=hora, minute=0, second=0, microsecond=0), datentry)
-    else:
+    elif entry is not None:
         datentry = me.getValue(entry)
     addHourIndex(datentry, accident)
     return map
 
-def addHourIndex(datentry, accident):
-    lst = datentry['lstaccidents']
-    lt.addLast(lst, accident)
-
-    return datentry
-
 def addDateIndex(datentry, accident):
     lst = datentry['lstaccidents']
     lt.addLast(lst, accident)
+    
+    return datentry
 
+def addHourIndex(datentry, accident):
+    lst = datentry['lstaccidents']
+    lt.addLast(lst, accident)
     return datentry
 
 def newDataEntry(accident):
     entry = {'lstaccidents': None}
     entry['lstaccidents'] = lt.newList('ARRAY_LIST', compareDates)
+    return entry
+
+def newHourEntry(accident):
+    entry = {'lstaccidents': None}
+    entry['lstaccidents'] = lt.newList('ARRAY_LIST')
     return entry
 
 
@@ -186,7 +186,7 @@ def accidentsBeforeDate(analyzer, date):
 
 def accidentsRangeDate(analyzer, dateStart, dateEnd):
     accidentdate = om.get(analyzer['dateIndex'], dateStart)
-    if accidentdate['key'] is not None:
+    if accidentdate is not None:
         valor = om.values(analyzer["dateIndex"], dateStart, dateEnd)
         severidades = {"Severidad 1":0, "Severidad 2":0, "Severidad 3":0, "Severidad 4": 0}
         lstiterator = it.newIterator(valor)
@@ -211,7 +211,7 @@ def accidentsRangeDate(analyzer, dateStart, dateEnd):
 
 def getAccidentsByRangeState(analyzer, initialDate, endDate):
     accidentdate = om.get(analyzer['dateIndex'], initialDate)
-    if accidentdate['key'] is not None:
+    if accidentdate is not None:
         valor = om.values(analyzer["dateIndex"], initialDate, endDate)
         estados = {}
         fechas = {}
@@ -246,26 +246,18 @@ def getAccidentsByRangeState(analyzer, initialDate, endDate):
         return "Ninguno", "SF"
 
 def accidentsPerHour(analyzer, hourStart, hourEnd):
-    if hourStart.minute >= 0 and hourStart.minute < 15:
+    if hourStart.minute >= 0 and hourStart.minute <= 30:
         fechaIni = hourStart.replace(minute=0, second=0, microsecond=0)
-    elif hourStart.minute >= 15 and hourStart.minute < 30:
-        fechaIni = hourStart.replace(minute=30, second=0, microsecond=0)
-    elif hourStart.minute >= 30 and hourStart.minute < 45:
-        fechaIni = hourStart.replace(minute=30, second=0, microsecond=0)
-    elif hourStart.minute >= 45 and hourStart.minute < 59:
+    elif hourStart.minute > 45 and hourStart.minute <= 59:
         if hourStart.hour == 23:
             hora = 0
         else:
             hora = hourStart.hour + 1
         fechaIni = hourStart.replace(hour=hora, minute=0, second=0, microsecond=0)
 
-    if hourEnd.minute >= 0 and hourEnd.minute < 30:
+    if hourEnd.minute >= 0 and hourEnd.minute <= 30:
         fechaFin = hourEnd.replace(minute=0, second=0, microsecond=0)
-    elif hourEnd.minute >= 15 and hourEnd.minute < 30:
-        fechaFin = hourEnd.replace(minute=30, second=0, microsecond=0)
-    elif hourEnd.minute >= 30 and hourEnd.minute < 45:
-        fechaFin = hourEnd.replace(minute=30, second=0, microsecond=0)
-    elif hourEnd.minute >= 45 and hourEnd.minute < 59:
+    elif hourEnd.minute > 30 and hourEnd.minute <= 59:
         if hourEnd.hour == 23:
             horafin = 0
         else:
@@ -273,11 +265,11 @@ def accidentsPerHour(analyzer, hourStart, hourEnd):
         fechaFin = hourEnd.replace(hour=horafin, minute=0, second=0, microsecond=0)
 
     accidenthour = om.get(analyzer['hourIndex'], fechaIni)
-    if accidenthour['key'] is not None:
+    print(accidenthour)
+    if accidenthour is not None:
         valor = om.values(analyzer["hourIndex"], fechaIni, fechaFin)
         lstiterator = it.newIterator(valor)
         totalaccidents = 0
-        num = 0
         Sev1 = 0
         Sev2 = 0
         Sev3 = 0
@@ -285,18 +277,20 @@ def accidentsPerHour(analyzer, hourStart, hourEnd):
         while (it.hasNext(lstiterator)):
             lstdate = it.next(lstiterator)
             totalaccidents += lt.size(lstdate['lstaccidents'])
-            if int(lstdate["elements"][num]["Severity"]) == 1:
-                Sev1 += 1
-            elif int(lstdate["elements"][num]["Severity"]) == 2:
-                Sev2 += 1
-            elif int(lstdate["elements"][num]["Severity"]) == 3:
-                Sev3 += 1
-            elif int(lstdate["elements"][num]["Severity"]) == 4:
-                Sev4 += 1
-            num += 1
-        numaccident = controller.accidentsSize(analyzer)
+            tamlista = lt.size(lstdate['lstaccidents'])
+            num = 0
+            while num < tamlista:
+                if int(lstdate['lstaccidents']["elements"][num]["Severity"]) == 1:
+                    Sev1 += 1
+                elif int(lstdate['lstaccidents']["elements"][num]["Severity"]) == 2:
+                    Sev2 += 1
+                elif int(lstdate['lstaccidents']["elements"][num]["Severity"]) == 3:
+                    Sev3 += 1
+                elif int(lstdate['lstaccidents']["elements"][num]["Severity"]) == 4:
+                    Sev4 += 1
+                num += 1
+        numaccident = accidentsSize(analyzer)
         promedio = (totalaccidents/numaccident)*100
-
         return totalaccidents, Sev1, Sev2, Sev3, Sev4, promedio
     else:
         return 0, 0, 0, 0, 0, 0
@@ -320,15 +314,6 @@ def compareDates(date1, date2):
     if (date1 == date2):
         return 0
     elif (date1 > date2):
-        return 1
-    else:
-        return -1
-
-def compareStates(state1, state2):
-    state = me.getKey(state2)
-    if (state1 == state):
-        return 0
-    elif (state1 > state):
         return 1
     else:
         return -1
