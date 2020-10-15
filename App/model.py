@@ -77,20 +77,21 @@ def updateDateIndex(map, accident):
 def updateHourIndex(map, accident):
     occurredhour = accident['Start_Time']
     accidentdate = datetime.datetime.strptime(occurredhour, '%Y-%m-%d %H:%M:%S')
-    entry = om.get(map, accidentdate.time().replace(second=0, microsecond=0))
+    if accidentdate.minute >= 0 and accidentdate.minute <= 30:
+        nuevaHora = accidentdate.time().replace(minute=0, second=0)
+    elif accidentdate.minute > 30 and accidentdate.minute <= 59:
+        if accidentdate.hour == 23:
+            hora = 0
+        else:
+            hora = accidentdate.hour + 1
+        nuevaHora = accidentdate.time().replace(hour=hora, minute=0, second=0)
+    entry = om.get(map, nuevaHora)
     if entry is None:
         datentry = newHourEntry(accident)
-        if accidentdate.minute >= 0 and accidentdate.minute <= 30:
-            om.put(map, accidentdate.time().replace(minute=0, second=0, microsecond=0), datentry)
-        elif accidentdate.minute > 30 and accidentdate.minute <= 59:
-            if accidentdate.hour == 23:
-                hora = 0
-            else:
-                hora = accidentdate.hour + 1
-            om.put(map, accidentdate.time().replace(hour=hora, minute=0, second=0, microsecond=0), datentry)
-    elif entry is not None:
+        om.put(map, nuevaHora, datentry)
+    else:
         datentry = me.getValue(entry)
-    addHourIndex(datentry, accident)
+    addDateIndex(datentry, accident)
     return map
 
 def addDateIndex(datentry, accident):
@@ -99,10 +100,6 @@ def addDateIndex(datentry, accident):
     
     return datentry
 
-def addHourIndex(datentry, accident):
-    lst = datentry['lstaccidents']
-    lt.addLast(lst, accident)
-    return datentry
 
 def newDataEntry(accident):
     entry = {'lstaccidents': None}
@@ -265,7 +262,6 @@ def accidentsPerHour(analyzer, hourStart, hourEnd):
         fechaFin = hourEnd.replace(hour=horafin, minute=0, second=0, microsecond=0)
 
     accidenthour = om.get(analyzer['hourIndex'], fechaIni)
-    print(accidenthour)
     if accidenthour is not None:
         valor = om.values(analyzer["hourIndex"], fechaIni, fechaFin)
         lstiterator = it.newIterator(valor)
