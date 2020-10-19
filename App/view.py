@@ -112,7 +112,7 @@ while True:
         horaFin = input("Entre la hora final a buscar (Formato: HH:MM): ")
         print("\nBuscando accidentes entre {0} y {1}: ".format(horaIni, horaFin))
         totalaccidents, sev1, sev2, sev3, sev4, promedio = controller.accidentsPerHour(cont, horaIni, horaFin)
-        print(totalaccidents)
+        print("Se han registrado {0} accidentes entre las horas de {1} y {2}. \n Se encontraron los siguientes accidentes: \nSeveridad 1: {3} \nSeveridad 2: {4} \nSeveridad 3: {5} \nSeveridad 4: {6} \nEl promedio de accidentes encontrados con respecto al total: {7}".format(totalaccidents, horaIni, horaFin, sev1, sev2, sev3, sev4, promedio))
     else:
         sys.exit(0)
 sys.exit(0)
