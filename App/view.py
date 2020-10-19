@@ -39,7 +39,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\US_Accidents_Dec19.csv"
 
 # ___________________________________________________
 #  Menú principal
@@ -111,7 +111,7 @@ while True:
         horaIni = input("Entre la hora inicial a buscar (Formato: HH:MM): ")
         horaFin = input("Entre la hora final a buscar (Formato: HH:MM): ")
         print("\nBuscando accidentes entre {0} y {1}: ".format(horaIni, horaFin))
-        totalaccidents = controller.accidentsPerHour(cont, horaIni, horaFin)
+        totalaccidents, sev1, sev2, sev3, sev4, promedio = controller.accidentsPerHour(cont, horaIni, horaFin)
         print(totalaccidents)
     else:
         sys.exit(0)
