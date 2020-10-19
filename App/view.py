@@ -39,7 +39,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_dis_2016.csv" 
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\US_Accidents_Dec19.csv"
 
 # ___________________________________________________
 #  Menú principal
@@ -56,6 +56,7 @@ def printMenu():
     print("4- Consultar cantidad de accidentes antes de una fecha")
     print("5- Consultar cantidad de accidentes entre fechas")
     print("6- Consultar el estado con más accidentes entre ciertas fechas")
+    print("7- Consultar la cantidad de accidentes en un rango de horas. (Consulta todas las fechas)")
     print("0- Salir")
     print("*******************************************")
 
@@ -79,7 +80,6 @@ while True:
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
         print('Menor Llave: ' + str(controller.minKey(cont)))
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
-        print(cont["hourIndex"])
     elif int(inputs[0]) == 3:
         fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
         print("\nBuscando accidentes en una fecha por severidad")
@@ -111,9 +111,10 @@ while True:
         horaIni = input("Entre la hora inicial a buscar (Formato: HH:MM): ")
         horaFin = input("Entre la hora final a buscar (Formato: HH:MM): ")
         print("\nBuscando accidentes entre {0} y {1}: ".format(horaIni, horaFin))
-        totalaccidents = controller.accidentsPerHour(cont, horaIni, horaFin)
+        totalaccidents, sev1, sev2, sev3, sev4, promedio = controller.accidentsPerHour(cont, horaIni, horaFin)
         print(totalaccidents)
     else:
         sys.exit(0)
 sys.exit(0)
+
 
