@@ -39,7 +39,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\US_Accidents_Dec19.csv"
+accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
 
 # ___________________________________________________
 #  Menú principal
@@ -89,7 +89,6 @@ while True:
         print("Severidad 2 : {0}".format(sev2))
         print("Severidad 3 : {0}".format(sev3))
         print("Severidad 4 : {0}".format(sev4))
-
     elif int(inputs[0]) == 4:
         fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
         print("\nBuscando accidentes antes de: {0}".format(fecha))
@@ -112,7 +111,7 @@ while True:
         horaFin = input("Entre la hora final a buscar (Formato: HH:MM): ")
         print("\nBuscando accidentes entre {0} y {1}: ".format(horaIni, horaFin))
         totalaccidents, sev1, sev2, sev3, sev4, promedio = controller.accidentsPerHour(cont, horaIni, horaFin)
-        print("Se han registrado {0} accidentes entre las horas de {1} y {2}. \n Se encontraron los siguientes accidentes: \nSeveridad 1: {3} \nSeveridad 2: {4} \nSeveridad 3: {5} \nSeveridad 4: {6} \nEl promedio de accidentes encontrados con respecto al total: {7}".format(totalaccidents, horaIni, horaFin, sev1, sev2, sev3, sev4, promedio))
+        print("Se han registrado {0} accidentes entre las horas de {1} y {2}. \nSe encontraron los siguientes accidentes: \nSeveridad 1: {3} \nSeveridad 2: {4} \nSeveridad 3: {5} \nSeveridad 4: {6} \nEl promedio de accidentes encontrados con respecto al total es: {7}".format(totalaccidents, horaIni, horaFin, sev1, sev2, sev3, sev4, promedio))
     else:
         sys.exit(0)
 sys.exit(0)
