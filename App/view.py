@@ -26,6 +26,7 @@ from DISClib.ADT import list as lt
 from App import controller
 assert config
 from DISClib.ADT import orderedmap as om
+from time import process_time 
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -39,7 +40,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-accidentsfile = r"C:\Users\Juan PC\Documents\Python Scripts\Reto-3\Data\us_accidents_small.csv"
+accidentsfile = "\Data\US_Accidents_Dec19.csv"
 
 # ___________________________________________________
 #  Menú principal
@@ -73,13 +74,16 @@ while True:
         cont = controller.init()
 
     elif int(inputs[0]) == 2:
+        t1_start = process_time()
         print("\nCargando información de accidentes ....")
         controller.loadData(cont, accidentsfile)
+        t1_stop = process_time()
         print('Accidentes cargados: ' + str(controller.accidentsSize(cont)))
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
         print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
         print('Menor Llave: ' + str(controller.minKey(cont)))
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
+        print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
     elif int(inputs[0]) == 3:
         fecha = input("Entre la fecha a buscar (Formato: YYYY-MM-DD): ")
         print("\nBuscando accidentes en una fecha por severidad")
